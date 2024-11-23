@@ -26,11 +26,11 @@ public class XPMultHandler {
             int enchantmentLevel = EnchantmentHelper.getLevel(Customenchants.XP_MULTW, weapon);
 
             if (enchantmentLevel > 0) {
+                entity.disableExperienceDropping();
                 // Get the original XP
                 int originalXP = entity.getXpToDrop();
                 // Multiply the XP by (1 + enchantment level)
                 int newXP = (int) (originalXP * (1 + enchantmentLevel));
-                entity.disableExperienceDropping();
                 player.addExperience(newXP);
             }
         }
@@ -39,6 +39,7 @@ public class XPMultHandler {
         PlayerBlockBreakEvents.AFTER.register((world, player, pos, state, blockEntity) -> {
             handleBlockBreak(world, player, pos, state);
         });
+
     }
     private static void handleBlockBreak(World world, PlayerEntity player, BlockPos pos, BlockState state) {
         // Check if the player has the XP Multiplier enchantment
@@ -68,7 +69,7 @@ public class XPMultHandler {
         } else if (state.isOf(Blocks.REDSTONE_ORE) || state.isOf(Blocks.DEEPSLATE_REDSTONE_ORE)) {
             return 3;
         } else if (state.isOf(Blocks.NETHER_QUARTZ_ORE)) {
-            return 2;
+            return 4;
         } else if (state.isOf(Blocks.NETHER_GOLD_ORE)) {
             return 1;
         }

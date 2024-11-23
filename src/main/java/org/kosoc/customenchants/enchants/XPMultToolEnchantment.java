@@ -6,7 +6,7 @@ import net.minecraft.entity.EquipmentSlot;
 
 public class XPMultToolEnchantment extends Enchantment {
     public XPMultToolEnchantment() {
-        super(Enchantment.Rarity.RARE, EnchantmentTarget.WEAPON, new EquipmentSlot[]{EquipmentSlot.MAINHAND});
+        super(Enchantment.Rarity.RARE, EnchantmentTarget.DIGGER, new EquipmentSlot[]{EquipmentSlot.MAINHAND});
     }
 
     @Override
