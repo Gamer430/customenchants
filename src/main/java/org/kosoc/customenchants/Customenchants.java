@@ -20,6 +20,7 @@ import net.minecraft.util.Identifier;
 import org.kosoc.customenchants.enchants.DashEnchantment;
 import org.kosoc.customenchants.enchants.XPMultToolEnchantment;
 import org.kosoc.customenchants.enchants.XPMultWeaponEnchantment;
+import org.kosoc.customenchants.handlers.XPMultHandler;
 import org.lwjgl.glfw.GLFW;
 
 
@@ -32,6 +33,7 @@ public class Customenchants implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        XPMultHandler.register();
         // Enchantment registration here
         Registry.register(Registries.ENCHANTMENT, new Identifier("customenchants", "dash"), DASH);
         Registry.register(Registries.ENCHANTMENT, new Identifier("customenchants", "xpmultt"), XP_MULTT);
