@@ -1,4 +1,4 @@
-package org.kosoc.customenchants.client;
+package org.kosoc.customenchants.handlers;
 
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EquipmentSlot;

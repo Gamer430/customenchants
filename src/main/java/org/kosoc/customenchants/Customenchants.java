@@ -18,6 +18,8 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import org.kosoc.customenchants.enchants.DashEnchantment;
+import org.kosoc.customenchants.enchants.XPMultToolEnchantment;
+import org.kosoc.customenchants.enchants.XPMultWeaponEnchantment;
 import org.lwjgl.glfw.GLFW;
 
 
@@ -25,11 +27,15 @@ public class Customenchants implements ModInitializer {
     public static final String MOD_ID = "customenchants";
     private static KeyBinding dashKey;
     public static Enchantment DASH = new DashEnchantment();
+    public static Enchantment XP_MULTT = new XPMultToolEnchantment();
+    public static Enchantment XP_MULTW = new XPMultWeaponEnchantment();
 
     @Override
     public void onInitialize() {
         // Enchantment registration here
         Registry.register(Registries.ENCHANTMENT, new Identifier("customenchants", "dash"), DASH);
+        Registry.register(Registries.ENCHANTMENT, new Identifier("customenchants", "xpmultt"), XP_MULTT);
+        Registry.register(Registries.ENCHANTMENT, new Identifier("customenchants", "xpmultw"), XP_MULTW);
     }
 
 
