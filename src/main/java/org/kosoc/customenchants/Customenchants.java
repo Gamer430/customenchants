@@ -11,16 +11,17 @@ import net.minecraft.client.util.InputUtil;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.packet.s2c.play.EntityDamageS2CPacket;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import org.kosoc.customenchants.enchants.DashEnchantment;
-import org.kosoc.customenchants.enchants.VanillaEnchant;
-import org.kosoc.customenchants.enchants.XPMultToolEnchantment;
-import org.kosoc.customenchants.enchants.XPMultWeaponEnchantment;
+import net.minecraft.util.hit.EntityHitResult;
+import org.kosoc.customenchants.effects.JackpotEffect;
+import org.kosoc.customenchants.enchants.*;
 import org.kosoc.customenchants.handlers.XPMultHandler;
 import org.lwjgl.glfw.GLFW;
 
@@ -32,6 +33,8 @@ public class Customenchants implements ModInitializer {
     public static Enchantment XP_MULTT = new XPMultToolEnchantment();
     public static Enchantment XP_MULTW = new XPMultWeaponEnchantment();
     public static Enchantment VANILLA = new VanillaEnchant();
+    public static Enchantment JACKPOT = new JackpotEnchant();
+    public static StatusEffect JACKPOTEFFECT = new JackpotEffect();
 
     @Override
     public void onInitialize() {
@@ -41,6 +44,10 @@ public class Customenchants implements ModInitializer {
         Registry.register(Registries.ENCHANTMENT, new Identifier("customenchants", "xpmultt"), XP_MULTT);
         Registry.register(Registries.ENCHANTMENT, new Identifier("customenchants", "xpmultw"), XP_MULTW);
         Registry.register(Registries.ENCHANTMENT, new Identifier("customenchants", "vanilla"), VANILLA);
+        Registry.register(Registries.ENCHANTMENT, new Identifier("customenchants", "jackpot"), JACKPOT);
+
+        // Effect Refistries
+        Registry.register(Registries.STATUS_EFFECT, new Identifier("customenchants", "jackpoteffect"), JACKPOTEFFECT);
     }
 
 

@@ -12,9 +12,9 @@ public class JackpotData {
         boolean charges = nbt.getBoolean("jackpotCharged");
         boolean jackpot = nbt.getBoolean("isInJackpot");
 
-        if(cooldown <= 1200 && !charges && !jackpot){
+        if(cooldown <= 10 && !charges && !jackpot){
             cooldown += 1;
-        } else if (cooldown >= 1200 && !charges) {
+        } else if (cooldown >= 10 && !charges) {
             cooldown = 0;
             charges = true;
         }else return cooldown;
@@ -47,6 +47,10 @@ public class JackpotData {
             jackpotLength = 5200;
             isCharged = false;
             jackpot = true;
-        }
+        } else return false;
+        nbt.putBoolean("jackpotCharged", isCharged);
+        nbt.putBoolean("isInJackpot", jackpot);
+        nbt.putInt("jackpotLength", jackpotLength);
+        return true;
     }
 }
