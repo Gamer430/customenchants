@@ -18,6 +18,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import org.kosoc.customenchants.enchants.DashEnchantment;
+import org.kosoc.customenchants.enchants.VanillaEnchant;
 import org.kosoc.customenchants.enchants.XPMultToolEnchantment;
 import org.kosoc.customenchants.enchants.XPMultWeaponEnchantment;
 import org.kosoc.customenchants.handlers.XPMultHandler;
@@ -30,6 +31,7 @@ public class Customenchants implements ModInitializer {
     public static Enchantment DASH = new DashEnchantment();
     public static Enchantment XP_MULTT = new XPMultToolEnchantment();
     public static Enchantment XP_MULTW = new XPMultWeaponEnchantment();
+    public static Enchantment VANILLA = new VanillaEnchant();
 
     @Override
     public void onInitialize() {
@@ -38,6 +40,7 @@ public class Customenchants implements ModInitializer {
         Registry.register(Registries.ENCHANTMENT, new Identifier("customenchants", "dash"), DASH);
         Registry.register(Registries.ENCHANTMENT, new Identifier("customenchants", "xpmultt"), XP_MULTT);
         Registry.register(Registries.ENCHANTMENT, new Identifier("customenchants", "xpmultw"), XP_MULTW);
+        Registry.register(Registries.ENCHANTMENT, new Identifier("customenchants", "vanilla"), VANILLA);
     }
 
 

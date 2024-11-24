@@ -4,28 +4,22 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EquipmentSlot;
 
-public class DashEnchantment extends Enchantment {
-    public DashEnchantment() {
-        super(Rarity.UNCOMMON, EnchantmentTarget.ARMOR_FEET, new EquipmentSlot[]{EquipmentSlot.FEET});
+public class JackpotEnchant extends Enchantment {
+    public JackpotEnchant(){
+        super(Rarity.VERY_RARE, EnchantmentTarget.ARMOR_CHEST, new EquipmentSlot[]{EquipmentSlot.CHEST});
     }
 
     @Override
-    public int getMinPower(int level) {
-        return 1;
+    public int getMinPower(int level){
+        return 30;
     }
-
     @Override
     public int getMaxLevel() {
-        return 3;
+        return 1; // Maximum level of the enchantment
     }
 
     @Override
-    public boolean isTreasure() {
-        return false;
-    }
-
-    @Override
-    public boolean isCursed() {
+    public boolean isCursed(){
         return false;
     }
 

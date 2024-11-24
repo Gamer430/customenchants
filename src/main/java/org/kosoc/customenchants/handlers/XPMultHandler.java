@@ -1,37 +1,44 @@
 package org.kosoc.customenchants.handlers;
 
+import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.kosoc.customenchants.Customenchants;
 
 public class XPMultHandler {
-    public static void onEntityDeath(LivingEntity entity) {
-        if (entity.getWorld().isClient) return; // Ignore client side
+    public static void onMobEntityDeath(MobEntity entity) {
+        if (entity.getWorld().isClient) return; // Skip client logic
 
-        if (entity instanceof PlayerEntity) {
-            return; // Skip if the player kills itself
-        }
+        if (!(entity instanceof MobEntity) ) return; // Ensure it's a mob
 
-        // Check if the player has the XP Multiplier Enchantment
-        PlayerEntity player = (PlayerEntity) entity.getAttacker();
-        if (player != null) {
-            ItemStack weapon = player.getMainHandStack();
+        PlayerEntity killer = entity.getAttacker() instanceof PlayerEntity ? (PlayerEntity) entity.getAttacker() : null;
+        if (killer != null) {
+            ItemStack weapon = killer.getMainHandStack();
             int enchantmentLevel = EnchantmentHelper.getLevel(Customenchants.XP_MULTW, weapon);
+            int enchantmentLevel2 = EnchantmentHelper.getLevel(Customenchants.XP_MULTT, weapon);
+            World World = entity.getWorld();
 
-            if (enchantmentLevel > 0) {
+            if (enchantmentLevel > 0 || enchantmentLevel2 >0) {
+                int originalXp = entity.getXpToDrop();
+                int multipliedXp = originalXp * (1 + enchantmentLevel);
+
+                // Prevent default XP orb drop
                 entity.disableExperienceDropping();
-                // Get the original XP
-                int originalXP = entity.getXpToDrop();
-                // Multiply the XP by (1 + enchantment level)
-                int newXP = (int) (originalXP * (1 + enchantmentLevel));
-                player.addExperience(newXP);
+
+                // Directly award XP to the player
+                boolean b = World.spawnEntity(new ExperienceOrbEntity(entity.getWorld(), entity.getPos().x,entity.getPos().y,entity.getPos().z,entity.getXpToDrop() * 6));
             }
         }
     }
@@ -39,6 +46,7 @@ public class XPMultHandler {
         PlayerBlockBreakEvents.AFTER.register((world, player, pos, state, blockEntity) -> {
             handleBlockBreak(world, player, pos, state);
         });
+
 
     }
     private static void handleBlockBreak(World world, PlayerEntity player, BlockPos pos, BlockState state) {

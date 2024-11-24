@@ -28,4 +28,9 @@ public class XPMultToolEnchantment extends Enchantment {
     public boolean isCursed() {
         return false;
     }
+
+    @Override
+    public boolean isAvailableForEnchantedBookOffer(){
+        return true;
+    }
 }
