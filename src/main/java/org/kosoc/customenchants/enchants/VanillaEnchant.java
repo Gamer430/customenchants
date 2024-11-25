@@ -41,10 +41,32 @@ public class VanillaEnchant extends Enchantment {
     public boolean isAcceptableItem(ItemStack stack){
         Item item = stack.getItem();
         Identifier ItemID = Registries.ITEM.getId(item);
-        if(ItemID.getNamespace().contains("minecraft:") && stack.getEnchantments().isEmpty()){
+        if(ItemID.getNamespace().contains("minecraft:")){
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean canAccept(Enchantment other){
+        return false;
+    }
+
+    public static void applySoloEnchantment(ItemStack itemStack, Enchantment soloEnchantment, int level) {
+        // Clear all enchantments
+        clearEnchantments(itemStack);
+
+        // Add this enchantment
+        itemStack.addEnchantment(soloEnchantment, level);
+    }
+
+    public static void clearEnchantments(ItemStack itemStack) {
+        if (itemStack.hasEnchantments()) {
+            NbtCompound nbt = itemStack.getNbt();
+            if (nbt != null && nbt.contains("Enchantments")) {
+                nbt.remove("Enchantments"); // Remove all enchantments
+            }
+        }
     }
 
 
