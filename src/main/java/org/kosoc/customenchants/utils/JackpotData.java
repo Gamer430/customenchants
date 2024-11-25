@@ -1,56 +1,53 @@
 package org.kosoc.customenchants.utils;
 
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import org.kosoc.customenchants.IPlayerData;
 
 public class JackpotData {
-    public static int rechargeJackpot(PlayerEntity player){
-        IPlayerData playerData = (IPlayerData) player;
+    public static void rechargeJackpot(IPlayerData playerData){
         NbtCompound nbt = playerData.getPersistantData();
+        boolean isCharged = nbt.getBoolean("isCharged");
+        boolean inJackpot = nbt.getBoolean("inJackpot");
         int cooldown = nbt.getInt("jackpotCooldown");
-        boolean charges = nbt.getBoolean("jackpotCharged");
-        boolean jackpot = nbt.getBoolean("isInJackpot");
 
-        if(cooldown <= 10 && !charges && !jackpot){
+        if(!isCharged && !inJackpot && cooldown < 10){
             cooldown += 1;
-        } else if (cooldown >= 10 && !charges) {
-            cooldown = 0;
-            charges = true;
-        }else return cooldown;
-        nbt.putBoolean("jackpotCharged", charges);
-        nbt.putInt("jackpotCooldown", cooldown);
-        return 0;
-    }
-
-    public static int isInJackpot(IPlayerData player){
-        NbtCompound nbt = player.getPersistantData();
-        int jackpotLength = nbt.getInt("jackpotLength");
-        boolean jackpot = nbt.getBoolean("isInJackpot");
-
-        if(jackpotLength > 0){
-            jackpotLength -= 1;
-        } else if (jackpotLength <= 0) {
-            jackpot = false;
-        }
-        nbt.putInt("jackpotLength", jackpotLength);
-        nbt.putBoolean("isInJackpot", jackpot);
-        return 0;
-    }
-
-    public static boolean useJackpot(IPlayerData player){
-        NbtCompound nbt = player.getPersistantData();
-        boolean isCharged = nbt.getBoolean("jackpotCharged");
-        boolean jackpot = nbt.getBoolean("isInJackpot");
-        int jackpotLength = nbt.getInt("jackpotLength");
-        if(isCharged == true && jackpot == false){
-            jackpotLength = 5200;
             isCharged = false;
-            jackpot = true;
-        } else return false;
-        nbt.putBoolean("jackpotCharged", isCharged);
-        nbt.putBoolean("isInJackpot", jackpot);
-        nbt.putInt("jackpotLength", jackpotLength);
-        return true;
+        } else if (cooldown >= 10 && !isCharged && !inJackpot) {
+            cooldown = 0;
+            inJackpot = false;
+            isCharged = true;
+            nbt.putBoolean("isCharged",isCharged);
+        }else return;
+
+        nbt.putInt("jackpotCooldown",cooldown);
+
+    }
+    public static void tickJackpot(IPlayerData playerData){
+        NbtCompound nbt = playerData.getPersistantData();
+        boolean inJackpot = nbt.getBoolean("inJackpot");
+        int time = nbt.getInt("jackpotTimer");
+
+        if(inJackpot && time >= 1){
+            time -= 1;
+        } else if (inJackpot && time <= 0) {
+            inJackpot = false;
+        } else return;
+        nbt.putBoolean("inJackpot", inJackpot);
+        nbt.putInt("jackpotTimer", time);
+    }
+    public static void useJackpot(IPlayerData playerData){
+        NbtCompound nbt = playerData.getPersistantData();
+        boolean inJackpot = nbt.getBoolean("inJackpot");
+        int time = nbt.getInt("jackpotTimer");
+        boolean isCharged = nbt.getBoolean("isCharged");
+        if(isCharged && !inJackpot){
+            isCharged = false;
+            inJackpot = true;
+            time = 5020;
+        }else return;
+        nbt.putInt("jackpotTimer", time);
+        nbt.putBoolean("inJackpot", inJackpot);
+        nbt.putBoolean("isCharged", isCharged);
     }
 }

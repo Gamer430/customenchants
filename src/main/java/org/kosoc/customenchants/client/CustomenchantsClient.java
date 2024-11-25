@@ -6,7 +6,9 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 
+import org.kosoc.customenchants.IPlayerData;
 import org.kosoc.customenchants.handlers.HandleDash;
+import org.kosoc.customenchants.handlers.JackpotHandler;
 import org.lwjgl.glfw.GLFW;
 ;
 
@@ -28,9 +30,8 @@ public class CustomenchantsClient implements ClientModInitializer {
         });
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            if (client.player != null && client.world.isClient) {
+            if (client.player != null) {
                 HandleDash.updateRechargeTimer(client.player);
-
             }
         });
     }

@@ -7,24 +7,28 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 
 public class JackpotEffect extends StatusEffect {
-    public JackpotEffect() {
-        super(StatusEffectCategory.BENEFICIAL, 0x55FF55); // You can change the color code as per your preference
+    public JackpotEffect(){
+        super(StatusEffectCategory.BENEFICIAL, 0xFF4500);
     }
     @Override
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
-        // Apply regeneration effect (Regeneration 6)
-        entity.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 5020, 5, false, false));
+        if (!entity.getWorld().isClient) {
+            // Apply Regeneration effect
+            entity.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 10, 6, false, false, false));
 
-        // Apply strength effect (Strength 2)
-        entity.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, 5020, 1, false, false));
+            // Apply Strength effect
+            entity.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, 10, amplifier, false, false, false));
 
-        // Apply speed effect (Speed 2)
-        entity.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 5020, 1, false, false));
+            // Apply Speed effect
+            entity.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 10, amplifier, false, false, false));
+
+            entity.addStatusEffect(new StatusEffectInstance(StatusEffects.SATURATION, 10, amplifier, false,false,false));
+        }
     }
 
     @Override
-    public boolean isInstant() {
-        // This effect is not instant, as it has a duration and can apply over time
-        return false;
+    public boolean canApplyUpdateEffect(int duration, int amplifier) {
+        // Apply the effect every tick
+        return true;
     }
 }

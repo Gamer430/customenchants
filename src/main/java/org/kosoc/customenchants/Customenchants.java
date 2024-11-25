@@ -2,28 +2,21 @@ package org.kosoc.customenchants;
 
 import net.fabricmc.api.ModInitializer;
 
-import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.packet.s2c.play.EntityDamageS2CPacket;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.hit.EntityHitResult;
 import org.kosoc.customenchants.effects.JackpotEffect;
 import org.kosoc.customenchants.enchants.*;
+import org.kosoc.customenchants.handlers.JackpotHandler;
 import org.kosoc.customenchants.handlers.XPMultHandler;
-import org.lwjgl.glfw.GLFW;
 
 
 public class Customenchants implements ModInitializer {
@@ -34,7 +27,7 @@ public class Customenchants implements ModInitializer {
     public static Enchantment XP_MULTW = new XPMultWeaponEnchantment();
     public static Enchantment VANILLA = new VanillaEnchant();
     public static Enchantment JACKPOT = new JackpotEnchant();
-    public static StatusEffect JACKPOTEFFECT = new JackpotEffect();
+    public static StatusEffect JACKPOTS = new JackpotEffect();
 
     @Override
     public void onInitialize() {
@@ -46,9 +39,22 @@ public class Customenchants implements ModInitializer {
         Registry.register(Registries.ENCHANTMENT, new Identifier("customenchants", "vanilla"), VANILLA);
         Registry.register(Registries.ENCHANTMENT, new Identifier("customenchants", "jackpot"), JACKPOT);
 
-        // Effect Refistries
-        Registry.register(Registries.STATUS_EFFECT, new Identifier("customenchants", "jackpoteffect"), JACKPOTEFFECT);
+        // Effect Registries
+        Registry.register(Registries.STATUS_EFFECT, new Identifier("customenchants", "jackpot"), JACKPOTS);
+        // TickListeners
+        CustomEntityDamageEvent.EVENT.register((entity, source, amount) -> {
+            if (entity instanceof PlayerEntity player) {
+                JackpotHandler.useJackpot(player);
+            }
+        });
+        ServerTickEvents.END_SERVER_TICK.register(this::onServerTick);
     }
 
+    private void onServerTick(MinecraftServer server) {
+        // Loop through all players on the server
+        for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+            JackpotHandler.updateTick((IPlayerData) player, player);
+        }
+    }
 
 }
