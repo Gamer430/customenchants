@@ -14,8 +14,8 @@ import net.minecraft.util.Identifier;
 import java.rmi.registry.Registry;
 
 public class VanillaEnchant extends Enchantment {
-    public VanillaEnchant(){
-        super(Rarity.VERY_RARE, EnchantmentTarget.BREAKABLE, new EquipmentSlot[]{EquipmentSlot.MAINHAND,EquipmentSlot.FEET,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.HEAD,EquipmentSlot.OFFHAND});
+    public VanillaEnchant(Enchantment.Rarity weight, EquipmentSlot... slotTypes){
+        super(weight, EnchantmentTarget.BREAKABLE, slotTypes);
     }
 
     @Override

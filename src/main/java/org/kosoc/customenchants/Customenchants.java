@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
@@ -28,7 +29,7 @@ public class Customenchants implements ModInitializer {
     public static Enchantment DASH = new DashEnchantment();
     public static Enchantment XP_MULTT = new XPMultToolEnchantment();
     public static Enchantment XP_MULTW = new XPMultWeaponEnchantment();
-    public static Enchantment VANILLA = new VanillaEnchant();
+    public static Enchantment VANILLA = new VanillaEnchant(Enchantment.Rarity.RARE, EquipmentSlot.values());
     public static Enchantment JACKPOT = new JackpotEnchant();
     public static StatusEffect JACKPOTS = new JackpotEffect();
 
