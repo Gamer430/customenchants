@@ -18,10 +18,9 @@ import net.minecraft.world.World;
 import org.kosoc.customenchants.Customenchants;
 
 public class XPMultHandler {
-    public static void onMobEntityDeath(MobEntity entity) {
+    public static void onEntityDeath(LivingEntity entity) {
         if (entity.getWorld().isClient) return; // Skip client logic
 
-        if (!(entity instanceof MobEntity) ) return; // Ensure it's a mob
 
         PlayerEntity killer = entity.getAttacker() instanceof PlayerEntity ? (PlayerEntity) entity.getAttacker() : null;
         if (killer != null) {
@@ -31,14 +30,14 @@ public class XPMultHandler {
             World World = entity.getWorld();
 
             if (enchantmentLevel > 0 || enchantmentLevel2 >0) {
-                int originalXp = entity.getXpToDrop();
+                int originalXp = 10;
                 int multipliedXp = originalXp * (1 + enchantmentLevel);
 
                 // Prevent default XP orb drop
                 entity.disableExperienceDropping();
 
                 // Directly award XP to the player
-                boolean b = World.spawnEntity(new ExperienceOrbEntity(entity.getWorld(), entity.getPos().x,entity.getPos().y,entity.getPos().z,entity.getXpToDrop() * 6));
+                boolean b = World.spawnEntity(new ExperienceOrbEntity(entity.getWorld(), entity.getPos().x,entity.getPos().y,entity.getPos().z,multipliedXp));
             }
         }
     }

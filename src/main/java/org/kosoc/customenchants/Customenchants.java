@@ -2,9 +2,12 @@ package org.kosoc.customenchants;
 
 import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -48,6 +51,7 @@ public class Customenchants implements ModInitializer {
             }
         });
         ServerTickEvents.END_SERVER_TICK.register(this::onServerTick);
+        ServerLivingEntityEvents.AFTER_DEATH.register(this::onEntityDeath);
     }
 
     private void onServerTick(MinecraftServer server) {
@@ -55,6 +59,16 @@ public class Customenchants implements ModInitializer {
         for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
             JackpotHandler.updateTick((IPlayerData) player, player);
         }
+    }
+
+    private void onEntityDeath(LivingEntity entity, DamageSource damageSource) {
+        if (!entity.getWorld().isClient) { // Ensure this runs only on the server side
+            handleDeathLogic(entity);
+        }
+    }
+
+    private void handleDeathLogic(LivingEntity entity){
+        XPMultHandler.onEntityDeath(entity);
     }
 
 }
