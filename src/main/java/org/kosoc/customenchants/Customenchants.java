@@ -25,6 +25,7 @@ import org.kosoc.customenchants.enchants.*;
 import org.kosoc.customenchants.handlers.HandleDash;
 import org.kosoc.customenchants.handlers.JackpotHandler;
 import org.kosoc.customenchants.handlers.XPMultHandler;
+import org.kosoc.customenchants.packets.ModPackets;
 
 
 public class Customenchants implements ModInitializer {
@@ -40,6 +41,7 @@ public class Customenchants implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        ModPackets.registerC2SPackets();
         XPMultHandler.register();
         // Enchantment registration here
         Registry.register(Registries.ENCHANTMENT, new Identifier("customenchants", "dash"), DASH);

@@ -41,7 +41,7 @@ public class VanillaEnchant extends Enchantment {
     public boolean isAcceptableItem(ItemStack stack){
         Item item = stack.getItem();
         Identifier ItemID = Registries.ITEM.getId(item);
-        if(ItemID.getNamespace().contains("minecraft:")){
+        if(ItemID.getNamespace().contains("minecraft")){
             return true;
         }
         return false;
