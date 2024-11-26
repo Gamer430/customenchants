@@ -15,6 +15,7 @@ import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.tag.DamageTypeTags;
@@ -23,6 +24,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import org.kosoc.customenchants.effects.JackpotEffect;
 import org.kosoc.customenchants.enchants.*;
+import org.kosoc.customenchants.handlers.BTrainHandler;
 import org.kosoc.customenchants.handlers.HandleDash;
 import org.kosoc.customenchants.handlers.JackpotHandler;
 import org.kosoc.customenchants.handlers.XPMultHandler;
@@ -39,6 +41,7 @@ public class Customenchants implements ModInitializer {
     public static Enchantment JACKPOT = new JackpotEnchant();
     public static Enchantment TFF = new TFFEnchant();
     public static Enchantment SB = new SoulboundEnchant(EquipmentSlot.values());
+    public static Enchantment BTrain = new BTrainEnchant();
     public static StatusEffect JACKPOTS = new JackpotEffect();
 
     @Override
@@ -53,6 +56,7 @@ public class Customenchants implements ModInitializer {
         Registry.register(Registries.ENCHANTMENT, new Identifier("customenchants", "jackpot"), JACKPOT);
         Registry.register(Registries.ENCHANTMENT, new Identifier("customenchants","tff"),TFF);
         Registry.register(Registries.ENCHANTMENT, new Identifier("customenchants","sb"), SB);
+        Registry.register(Registries.ENCHANTMENT, new Identifier("customenchants","btrain"), BTrain);
 
         // Effect Registries
         Registry.register(Registries.STATUS_EFFECT, new Identifier("customenchants", "jackpot"), JACKPOTS);
@@ -65,6 +69,17 @@ public class Customenchants implements ModInitializer {
         });
         ServerTickEvents.END_SERVER_TICK.register(this::onServerTick);
         ServerLivingEntityEvents.AFTER_DEATH.register(this::onEntityDeath);
+        ServerTickEvents.START_SERVER_TICK.register(server -> {
+            server.getPlayerManager().getPlayerList().forEach(player -> {
+                ItemStack boots = player.getEquippedStack(EquipmentSlot.FEET);
+                int enchantLevel = EnchantmentHelper.getLevel(Customenchants.BTrain, boots);
+
+                if (enchantLevel > 0) {
+                    BTrainHandler.updateBTrainEffect(player);
+                }
+            });
+        });
+
     }
 
     private void onServerTick(MinecraftServer server) {

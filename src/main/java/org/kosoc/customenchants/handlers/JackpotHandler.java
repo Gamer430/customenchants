@@ -38,11 +38,13 @@ public class JackpotHandler {
         if(totalDamage + amount >= 3) {
             if (isCharged && !inJackpot) {
                 Random random = new Random();
-                int randomNumber = random.nextInt(100) + 1; // Generates a number between 1 and 100
-                System.out.println("Random Number: " + randomNumber);
-                totalDamage = 0;
-                JackpotData.useJackpot(playerData);
-                player.addStatusEffect(new StatusEffectInstance(Customenchants.JACKPOTS, 5020, 0, false, true));
+                int randomNumber = random.nextInt(100) + 1;
+                if(randomNumber == 69) {// Generates a number between 1 and 100
+                    System.out.println("Random Number: " + randomNumber);
+                    totalDamage = 0;
+                    JackpotData.useJackpot(playerData);
+                    player.addStatusEffect(new StatusEffectInstance(Customenchants.JACKPOTS, 5020, 0, false, true));
+                }
             }
         }else totalDamage += amount;
         nbt.putFloat("totalDamage", totalDamage);
