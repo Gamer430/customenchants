@@ -12,10 +12,8 @@ public class JackpotData {
 
         if(!isCharged && !inJackpot && cooldown < 10){
             cooldown += 1;
-            isCharged = false;
         } else if (cooldown >= 10 && !isCharged && !inJackpot) {
             cooldown = 0;
-            inJackpot = false;
             isCharged = true;
             nbt.putBoolean("isCharged",isCharged);
         }else return;
@@ -30,7 +28,7 @@ public class JackpotData {
 
         if(inJackpot && time >= 1){
             time -= 1;
-        } else if (inJackpot && time <= 0) {
+        } else if (inJackpot) {
             inJackpot = false;
         } else return;
         nbt.putBoolean("inJackpot", inJackpot);

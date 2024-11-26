@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -37,6 +38,7 @@ public class Customenchants implements ModInitializer {
     public static Enchantment VANILLA = new VanillaEnchant(Enchantment.Rarity.RARE, EquipmentSlot.values());
     public static Enchantment JACKPOT = new JackpotEnchant();
     public static Enchantment TFF = new TFFEnchant();
+    public static Enchantment SB = new SoulboundEnchant(EquipmentSlot.values());
     public static StatusEffect JACKPOTS = new JackpotEffect();
 
     @Override
@@ -50,13 +52,14 @@ public class Customenchants implements ModInitializer {
         Registry.register(Registries.ENCHANTMENT, new Identifier("customenchants", "vanilla"), VANILLA);
         Registry.register(Registries.ENCHANTMENT, new Identifier("customenchants", "jackpot"), JACKPOT);
         Registry.register(Registries.ENCHANTMENT, new Identifier("customenchants","tff"),TFF);
+        Registry.register(Registries.ENCHANTMENT, new Identifier("customenchants","sb"), SB);
 
         // Effect Registries
         Registry.register(Registries.STATUS_EFFECT, new Identifier("customenchants", "jackpot"), JACKPOTS);
         // TickListeners
         CustomEntityDamageEvent.EVENT.register((entity, source, amount) -> {
             if (entity instanceof PlayerEntity player) {
-                JackpotHandler.useJackpot(player);
+                JackpotHandler.useJackpot(player, amount);
             }
 
         });
@@ -80,10 +83,6 @@ public class Customenchants implements ModInitializer {
 
     private void handleDeathLogic(LivingEntity entity){
         XPMultHandler.onEntityDeath(entity);
-    }
-
-    private void capFallDamage(LivingEntity entity, float amount){
-
     }
 
 }

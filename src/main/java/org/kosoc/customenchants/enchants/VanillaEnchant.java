@@ -52,22 +52,4 @@ public class VanillaEnchant extends Enchantment {
         return false;
     }
 
-    public static void applySoloEnchantment(ItemStack itemStack, Enchantment soloEnchantment, int level) {
-        // Clear all enchantments
-        clearEnchantments(itemStack);
-
-        // Add this enchantment
-        itemStack.addEnchantment(soloEnchantment, level);
-    }
-
-    public static void clearEnchantments(ItemStack itemStack) {
-        if (itemStack.hasEnchantments()) {
-            NbtCompound nbt = itemStack.getNbt();
-            if (nbt != null && nbt.contains("Enchantments")) {
-                nbt.remove("Enchantments"); // Remove all enchantments
-            }
-        }
-    }
-
-
 }

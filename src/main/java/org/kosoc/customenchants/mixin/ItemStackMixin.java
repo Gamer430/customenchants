@@ -2,18 +2,13 @@ package org.kosoc.customenchants.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.enchantment.EnchantmentHelper;
 
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtList;
 import org.kosoc.customenchants.Customenchants;
 import org.kosoc.customenchants.utils.EquipmentSlotUtil;
+import org.kosoc.customenchants.utils.SoulboundUtils;
 import org.kosoc.customenchants.utils.VanillaModifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -35,7 +30,7 @@ public abstract class ItemStackMixin {
         return original;
     }
     @ModifyReturnValue(method = "getMiningSpeedMultiplier", at = @At("RETURN"))
-    private float modigyMiningSpeed(float original) {
+    private float modifyMiningSpeed(float original) {
         ItemStack item = (ItemStack) (Object) this;
         int level = EnchantmentHelper.getLevel(Customenchants.VANILLA, item);
         if (level > 0) {
@@ -51,6 +46,12 @@ public abstract class ItemStackMixin {
         EquipmentSlot equip = EquipmentSlotUtil.getMainEquipmentSlot(item);
         if(EnchantmentHelper.getLevel(Customenchants.VANILLA, item) > 0){
             VanillaModifier.applyAttributeMultipliers(item, equip, 2.0);
+        }else if(EnchantmentHelper.getLevel(Customenchants.SB, item) > 0){
+            if(!SoulboundUtils.isSoulbound(item)){
+                SoulboundUtils.makeSoulbound(item);
+            }
         }
     }
+
+
 }
