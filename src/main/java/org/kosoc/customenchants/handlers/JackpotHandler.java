@@ -39,7 +39,7 @@ public class JackpotHandler {
             int randomNumber = random.nextInt(100) + 1; // Generates a number between 1 and 100
             System.out.println("Random Number: " + randomNumber);
             JackpotData.useJackpot(playerData);
-            player.addStatusEffect(new StatusEffectInstance(Customenchants.JACKPOTS, 5020, 1, false, true));
+            player.addStatusEffect(new StatusEffectInstance(Customenchants.JACKPOTS, 5020, 0, false, true));
         }
     }
 }

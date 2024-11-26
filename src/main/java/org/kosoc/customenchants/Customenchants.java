@@ -6,19 +6,23 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import org.kosoc.customenchants.effects.JackpotEffect;
 import org.kosoc.customenchants.enchants.*;
+import org.kosoc.customenchants.handlers.HandleDash;
 import org.kosoc.customenchants.handlers.JackpotHandler;
 import org.kosoc.customenchants.handlers.XPMultHandler;
 
@@ -31,6 +35,7 @@ public class Customenchants implements ModInitializer {
     public static Enchantment XP_MULTW = new XPMultWeaponEnchantment();
     public static Enchantment VANILLA = new VanillaEnchant(Enchantment.Rarity.RARE, EquipmentSlot.values());
     public static Enchantment JACKPOT = new JackpotEnchant();
+    public static Enchantment TFF = new TFFEnchant();
     public static StatusEffect JACKPOTS = new JackpotEffect();
 
     @Override
@@ -42,6 +47,7 @@ public class Customenchants implements ModInitializer {
         Registry.register(Registries.ENCHANTMENT, new Identifier("customenchants", "xpmultw"), XP_MULTW);
         Registry.register(Registries.ENCHANTMENT, new Identifier("customenchants", "vanilla"), VANILLA);
         Registry.register(Registries.ENCHANTMENT, new Identifier("customenchants", "jackpot"), JACKPOT);
+        Registry.register(Registries.ENCHANTMENT, new Identifier("customenchants","tff"),TFF);
 
         // Effect Registries
         Registry.register(Registries.STATUS_EFFECT, new Identifier("customenchants", "jackpot"), JACKPOTS);
@@ -50,6 +56,7 @@ public class Customenchants implements ModInitializer {
             if (entity instanceof PlayerEntity player) {
                 JackpotHandler.useJackpot(player);
             }
+
         });
         ServerTickEvents.END_SERVER_TICK.register(this::onServerTick);
         ServerLivingEntityEvents.AFTER_DEATH.register(this::onEntityDeath);
@@ -59,6 +66,7 @@ public class Customenchants implements ModInitializer {
         // Loop through all players on the server
         for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
             JackpotHandler.updateTick((IPlayerData) player, player);
+            HandleDash.updateRechargeTimer(player);
         }
     }
 
@@ -70,6 +78,10 @@ public class Customenchants implements ModInitializer {
 
     private void handleDeathLogic(LivingEntity entity){
         XPMultHandler.onEntityDeath(entity);
+    }
+
+    private void capFallDamage(LivingEntity entity, float amount){
+
     }
 
 }

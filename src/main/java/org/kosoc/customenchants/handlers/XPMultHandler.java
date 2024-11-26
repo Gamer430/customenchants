@@ -31,7 +31,7 @@ public class XPMultHandler {
 
             if (enchantmentLevel > 0 || enchantmentLevel2 >0) {
                 int originalXp = 10;
-                int multipliedXp = originalXp * (1 + enchantmentLevel);
+                int multipliedXp = originalXp * (enchantmentLevel);
 
                 // Prevent default XP orb drop
                 entity.disableExperienceDropping();
